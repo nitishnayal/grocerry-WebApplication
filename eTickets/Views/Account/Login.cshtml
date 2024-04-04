@@ -1,0 +1,43 @@
+﻿@using eTickets.Data.ViewModels;
+@model LoginVM;
+
+@{
+    ViewData["Title"] = "Log in to your account";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+            <div class="card-header text-center">
+                <h4>@ViewData["Title"]</h4>
+            </div>
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger">
+                    <strong>Sorry!</strong> - @TempData["Error"]
+                </div>
+            }
+            <div class="card-body">
+                <form asp-action="Login">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="EmailAddress" class="control-label"></label>
+                        <input asp-for="EmailAddress" class="form-control" />
+                        <span asp-validation-for="EmailAddress" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password" class="control-label"></label>
+                        <input asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input class="btn btn-primary btn-block" type="submit" value="Log in" />
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                <a class="btn btn-outline-secondary" asp-controller="Product" asp-action="Index">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>

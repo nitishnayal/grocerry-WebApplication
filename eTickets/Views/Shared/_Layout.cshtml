@@ -1,0 +1,74 @@
+﻿﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - eTickets</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" >
+   
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="nav-link text-warning" asp-area="" asp-controller="Product" asp-action="Index"> Home</a>
+              
+                <li class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow">
+
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+
+                            <li class="nav-item">
+                                <a class="dropdown-item text-warning" asp-area="" asp-controller="Product" asp-action="Index">&#x1F4E6 Products</a>
+                            </li>
+
+
+                            <li class="nav-item">
+                                <a class="dropdown-item text-warning" asp-controller="Store" asp-action="Index">&#x1F3EC Stores</a>
+                            </li>
+                            
+                            <li class="nav-item">
+                                <a class="dropdown-item text-warning" asp-controller="Company" asp-action="Index">&#x1F3E2 Companies</a>
+                            </li>
+                        }
+                       
+
+
+                      
+                           
+
+                    </ul>
+
+                    <form class="form-inline my-2 my-lg-0" asp-controller="Product" asp-action="Filter" style="padding-right: 25px;">
+                        <input name="searchString" type="text" class="form-control" placeholder="Search product..." aria-label="Recipient's username" aria-describedby="button-addon2">
+                        <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">&#x1F50D</button>
+                    </form>
+
+                    <ul class="navbar-nav">
+                        @await Component.InvokeAsync("ShoppingCartSummary")
+                    </ul>
+                </li>
+                 <partial name="_Identity.cshtml"/>  
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container-fluid">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+
+    </div>
+
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

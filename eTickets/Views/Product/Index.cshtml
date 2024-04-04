@@ -1,0 +1,95 @@
+﻿@model IEnumerable<Product>
+
+@{
+    ViewData["Title"] = "List of Products";
+}
+
+<style>
+    .card {
+        max-width: 400px; /* Adjust as needed */
+        border-radius: 15px; /* Add rounded corners */
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Add shadows */
+        transition: 0.3s; /* Add transition effects */
+    }
+
+        .card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0.8,0.2); /* Change shadow on hover */
+        }
+
+    .truncate {
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 col-xs-6 border-dark mb-3">
+            <div class="card mb-4 bg-white">
+                <div class="row g-0">
+                    <div class="col-md-12">
+                        <div class="card-header text-white bg-secondary">
+                            <p class="card-text truncate">
+                                <h5 class="card-title">
+                                    @item.Name
+                                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                                    {
+                                        <a class="text-white float-right" asp-action="Edit" asp-route-id="@item.Id">&#x270E</a>
+                                    }
+                                </h5>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <img src="@item.ImageURL" width="200" height="150" alt="@item.Name">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <p class="card-text truncate">@item.Description</p>
+                            <p class="card-text truncate"><b>Store: </b>@item.Store.Name</p>
+                            <p class="card-text truncate"><b>Category: </b>@item.ProductCategory</p>
+                            <p class="card-text truncate"><b>Start Date: </b>@item.StartDate.ToString("dd MMM yy")</p>
+                            <p class="card-text truncate"><b>End Date: </b>@item.EndDate.ToString("dd MMM yy")</p>
+                            <p class="card-text truncate">
+                                <b>Status: </b>
+                                @if (DateTime.Now >= item.StartDate && DateTime.Now <= item.EndDate)
+                                {
+                                    <span class="badge bg-success text-white">AVAILABLE</span>
+                                }
+                                else if (DateTime.Now > item.EndDate)
+                                {
+                                    <span class="badge bg-danger text-white">EXPIRED</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-primary text-white">UPCOMING</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-mb-2">
+                        <div class="card-footer ">
+                            <p class="card-text">
+                                <a class="btn btn-outline-primary float-right" asp-action="Details" asp-route-id="@item.Id">
+                                    &#x1F441
+                                </a>
+                                <a class="btn btn-success text-dark @((DateTime.Now > item.EndDate) ? "disabled" : "")"
+                                   asp-controller="Orders"
+                                   asp-action="AddItemToShoppingCart"
+                                   asp-route-id="@item.Id">
+                                   &#x1F6D2 Add-To_cart--(Price:₹ @item.Price)
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@await Html.PartialAsync("_CreateItem", "Product")
